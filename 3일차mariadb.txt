@@ -1,0 +1,422 @@
+Microsoft Windows [Version 10.0.17763.1039]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\admin>cd 'C:\MariaDB 10.3\bin'
+파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다.
+
+C:\Users\admin>cd 'C:\MariaDB 10.3\bin';
+파일 이름, 디렉터리 이름 또는 볼륨 레이블 구문이 잘못되었습니다.
+
+C:\Users\admin>cd C:\MariaDB 10.3\bin
+
+C:\MariaDB 10.3\bin>mysql -h localhost -r root  -p
+Enter password: ****
+ERROR 1045 (28000): Access denied for user 'admin'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>mysql -h localhost -r root  -p
+Enter password: ****
+ERROR 1045 (28000): Access denied for user 'admin'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>mysql -h localhost -r root -p;
+ERROR 1045 (28000): Access denied for user 'admin'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>mysql -h localhost -r root -p
+Enter password: ****
+ERROR 1045 (28000): Access denied for user 'admin'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>mysql -h localhost -r root -p
+Enter password: ****
+ERROR 1045 (28000): Access denied for user 'admin'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>
+C:\MariaDB 10.3\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 16
+Server version: 10.3.13-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database android;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> create 'pub'@'localhost' identified by'1234';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''pub'@'localhost' identified by'1234'' at line 1
+MariaDB [(none)]> create 'pub'@'localhost' identified by '1234';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''pub'@'localhost' identified by '1234'' at line 1
+MariaDB [(none)]> create user 'pub'@'localhost' identified by '1234';
+Query OK, 0 rows affected (0.005 sec)
+
+MariaDB [(none)]> grant all privileges on android.* to 'pub'@'localhost';
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [(none)]> show database
+    ->
+    -> /
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'database
+
+/' at line 1
+MariaDB [(none)]> flush privileges;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [(none)]> quit;
+Bye
+
+C:\MariaDB 10.3\bin>mysql -u user -p
+Enter password: ****
+ERROR 1045 (28000): Access denied for user 'user'@'localhost' (using password: YES)
+
+C:\MariaDB 10.3\bin>mysql -u pub -p
+Enter password: ****
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 18
+Server version: 10.3.13-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use android;
+Database changed
+----------------------------------
+MariaDB [(none)]> use android;
+Database changed
+MariaDB [android]> drop table dept;
+ERROR 1051 (42S02): Unknown table 'android.dept'
+MariaDB [android]> drop table emp;
+ERROR 1051 (42S02): Unknown table 'android.emp'
+MariaDB [android]>
+MariaDB [android]> create table dept(
+    -> deptno int primary key auto_increment
+    -> ,dname varchar(14)
+    -> ,loc varchar(13)
+    -> );
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [android]>
+MariaDB [android]>
+MariaDB [android]> insert into dept(deptno,dname,loc) values(10,'ACCOUNTING','NEW YORK');
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [android]> insert into dept(deptno,dname,loc) values(20,'RESEARCH','DALLAS');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into dept(deptno,dname,loc) values(30,'SALES','CHICAGO');
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [android]> insert into dept(deptno,dname,loc) values(40,'OPERATIONS','BOSTON');
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> create table emp(
+    -> empno int primary key auto_increment
+    -> ,ename varchar(10)
+    -> ,job varchar(9)
+    -> ,mgr int
+    -> ,hiredate timestamp
+    -> ,sal int
+    -> ,comm int
+    -> ,deptno int
+    -> );
+Query OK, 0 rows affected (0.012 sec)
+
+MariaDB [android]>
+MariaDB [android]>
+MariaDB [android]>
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7369,'SMITH','CLERK',7902,'80/12/17',800,20);
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) values(7499,'ALLEN','SALESMAN',7698,'81/02/20',1600,300,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) values(7521,'WARD','SALESMAN',7698,'81/02/22',1250,500,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7566,'JONES','MANAGER',7839,'81/04/02',2975,20);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) values(7654,'MARTIN','SALESMAN',7698,'81/09/28',1250,1400,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7698,'BLAKE','MANAGER',7839,'81/05/01',2850,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7782,'CLARK','MANAGER',7839,'81/06/09',2450,10);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7788,'SCOTT','ANALYST',7566,'87/04/19',3000,20);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,hiredate,sal,deptno) values(7839,'KING','PRESIDENT','81/11/17',5000,10);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno) values(7844,'TURNER','SALESMAN',7698,'81/09/08',1500,0,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7876,'ADAMS','CLERK',7788,'87/05/23',1100,20);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7900,'JAMES','CLERK',7698,'81/12/03',950,30);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7902,'FORD','ANALYST',7566,'81/12/03',3000,20);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]> insert into emp(empno,ename,job,mgr,hiredate,sal,deptno) values(7934,'MILLER','CLERK',7782,'82/01/23',1300,10);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [android]>
+MariaDB [android]> show tables;
++-------------------+
+| Tables_in_android |
++-------------------+
+| dept              |
+| emp               |
++-------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [android]> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.000 sec)
+
+MariaDB [android]> select * from emp;
++-------+--------+-----------+------+---------------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate            | sal  | comm | deptno |
++-------+--------+-----------+------+---------------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 00:00:00 |  800 | NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 00:00:00 | 1600 |  300 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 00:00:00 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 00:00:00 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 00:00:00 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 00:00:00 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 00:00:00 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1987-04-19 00:00:00 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 00:00:00 | 5000 | NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 00:00:00 | 1500 |    0 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 00:00:00 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 00:00:00 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 00:00:00 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 00:00:00 | 1300 | NULL |     10 |
++-------+--------+-----------+------+---------------------+------+------+--------+
+14 rows in set (0.000 sec)
+
+MariaDB [android]>
+MariaDB [android]> select ename, sal from emp;
++--------+------+
+| ename  | sal  |
++--------+------+
+| SMITH  |  800 |
+| ALLEN  | 1600 |
+| WARD   | 1250 |
+| JONES  | 2975 |
+| MARTIN | 1250 |
+| BLAKE  | 2850 |
+| CLARK  | 2450 |
+| SCOTT  | 3000 |
+| KING   | 5000 |
+| TURNER | 1500 |
+| ADAMS  | 1100 |
+| JAMES  |  950 |
+| FORD   | 3000 |
+| MILLER | 1300 |
++--------+------+
+14 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal, hiredate from emp order by sal asc;
++--------+------+---------------------+
+| ename  | sal  | hiredate            |
++--------+------+---------------------+
+| SMITH  |  800 | 1980-12-17 00:00:00 |
+| JAMES  |  950 | 1981-12-03 00:00:00 |
+| ADAMS  | 1100 | 1987-05-23 00:00:00 |
+| WARD   | 1250 | 1981-02-22 00:00:00 |
+| MARTIN | 1250 | 1981-09-28 00:00:00 |
+| MILLER | 1300 | 1982-01-23 00:00:00 |
+| TURNER | 1500 | 1981-09-08 00:00:00 |
+| ALLEN  | 1600 | 1981-02-20 00:00:00 |
+| CLARK  | 2450 | 1981-06-09 00:00:00 |
+| BLAKE  | 2850 | 1981-05-01 00:00:00 |
+| JONES  | 2975 | 1981-04-02 00:00:00 |
+| FORD   | 3000 | 1981-12-03 00:00:00 |
+| SCOTT  | 3000 | 1987-04-19 00:00:00 |
+| KING   | 5000 | 1981-11-17 00:00:00 |
++--------+------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal, hiredate from emp order by sal desc;
++--------+------+---------------------+
+| ename  | sal  | hiredate            |
++--------+------+---------------------+
+| KING   | 5000 | 1981-11-17 00:00:00 |
+| SCOTT  | 3000 | 1987-04-19 00:00:00 |
+| FORD   | 3000 | 1981-12-03 00:00:00 |
+| JONES  | 2975 | 1981-04-02 00:00:00 |
+| BLAKE  | 2850 | 1981-05-01 00:00:00 |
+| CLARK  | 2450 | 1981-06-09 00:00:00 |
+| ALLEN  | 1600 | 1981-02-20 00:00:00 |
+| TURNER | 1500 | 1981-09-08 00:00:00 |
+| MILLER | 1300 | 1982-01-23 00:00:00 |
+| MARTIN | 1250 | 1981-09-28 00:00:00 |
+| WARD   | 1250 | 1981-02-22 00:00:00 |
+| ADAMS  | 1100 | 1987-05-23 00:00:00 |
+| JAMES  |  950 | 1981-12-03 00:00:00 |
+| SMITH  |  800 | 1980-12-17 00:00:00 |
++--------+------+---------------------+
+14 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal from emp where sal < 3000;
++--------+------+
+| ename  | sal  |
++--------+------+
+| SMITH  |  800 |
+| ALLEN  | 1600 |
+| WARD   | 1250 |
+| JONES  | 2975 |
+| MARTIN | 1250 |
+| BLAKE  | 2850 |
+| CLARK  | 2450 |
+| TURNER | 1500 |
+| ADAMS  | 1100 |
+| JAMES  |  950 |
+| MILLER | 1300 |
++--------+------+
+11 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal from emp where sal > 3000;
++-------+------+
+| ename | sal  |
++-------+------+
+| KING  | 5000 |
++-------+------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select ename, sal from emp where sal >= 3000;
++-------+------+
+| ename | sal  |
++-------+------+
+| SCOTT | 3000 |
+| KING  | 5000 |
+| FORD  | 3000 |
++-------+------+
+3 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal from emp where sal >= 3000 order by sal asc;
++-------+------+
+| ename | sal  |
++-------+------+
+| SCOTT | 3000 |
+| FORD  | 3000 |
+| KING  | 5000 |
++-------+------+
+3 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, sal from emp where sal >= 3000 order by ename asc;
++-------+------+
+| ename | sal  |
++-------+------+
+| FORD  | 3000 |
+| KING  | 5000 |
+| SCOTT | 3000 |
++-------+------+
+3 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, empno, hiredate from emp where deptno = 30;
++--------+-------+---------------------+
+| ename  | empno | hiredate            |
++--------+-------+---------------------+
+| ALLEN  |  7499 | 1981-02-20 00:00:00 |
+| WARD   |  7521 | 1981-02-22 00:00:00 |
+| MARTIN |  7654 | 1981-09-28 00:00:00 |
+| BLAKE  |  7698 | 1981-05-01 00:00:00 |
+| TURNER |  7844 | 1981-09-08 00:00:00 |
+| JAMES  |  7900 | 1981-12-03 00:00:00 |
++--------+-------+---------------------+
+6 rows in set (0.000 sec)
+
+MariaDB [android]> select ename, empno, hiredate from emp where deptno = 30 order by empno asc;
++--------+-------+---------------------+
+| ename  | empno | hiredate            |
++--------+-------+---------------------+
+| ALLEN  |  7499 | 1981-02-20 00:00:00 |
+| WARD   |  7521 | 1981-02-22 00:00:00 |
+| MARTIN |  7654 | 1981-09-28 00:00:00 |
+| BLAKE  |  7698 | 1981-05-01 00:00:00 |
+| TURNER |  7844 | 1981-09-08 00:00:00 |
+| JAMES  |  7900 | 1981-12-03 00:00:00 |
++--------+-------+---------------------+
+6 rows in set (0.000 sec)
+
+MariaDB [android]> select sum(sal) from emp;
++----------+
+| sum(sal) |
++----------+
+|    29025 |
++----------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select sum(sal) as 급여합 from emp;;
++--------+
+| 급여합 |
++--------+
+|  29025 |
++--------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select avg(sal) as 평균 from emp;
++-----------+
+| 평균      |
++-----------+
+| 2073.2143 |
++-----------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select max(sal) as 최대값 from emp;
++--------+
+| 최대값 |
++--------+
+|   5000 |
++--------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select min(sal) as 최소값 from emp;
++--------+
+| 최소값 |
++--------+
+|    800 |
++--------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select max(sal) as 최대값 from emp where ename;
++--------+
+| 최대값 |
++--------+
+|   NULL |
++--------+
+1 row in set, 14 warnings (0.000 sec)
+
+MariaDB [android]> select ename, max(sal) as 최댓값 from emp;
++-------+--------+
+| ename | 최댓값 |
++-------+--------+
+| SMITH |   5000 |
++-------+--------+
+1 row in set (0.000 sec)
+
+MariaDB [android]> select count(*) 사원수 from emp;
++--------+
+| 사원수 |
++--------+
+|     14 |
++--------+
+1 row in set (0.000 sec)
+
+MariaDB [android]>
