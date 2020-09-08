@@ -1,0 +1,23 @@
+SQL> select count(*),sum(sal),max(sal),min(sal)from emp;
+
+  COUNT(*)   SUM(SAL)   MAX(SAL)   MIN(SAL)                                                                                                                                                             
+---------- ---------- ---------- ----------                                                                                                                                                             
+        14      29025       5000        800                                                                                                                                                             
+
+SQL> select count(*) as 사원수, sum(sal) as 급여합, max(sal) as 최대급여, min(sal) as 최소급여 from emp;
+
+    사원수     급여합   최대급여   최소급여                                                                                                                                                             
+---------- ---------- ---------- ----------                                                                                                                                                             
+        14      29025       5000        800                                                                                                                                                             
+
+SQL> select count(*), avg(sal),sum(sal),max(sal),min(sal)from emp;
+
+  COUNT(*)   AVG(SAL)   SUM(SAL)   MAX(SAL)   MIN(SAL)                                                                                                                                                  
+---------- ---------- ---------- ---------- ----------                                                                                                                                                  
+        14 2073.21429      29025       5000        800                                                                                                                                                  
+
+SQL> commit;
+
+Commit complete.
+
+SQL> spool off;

@@ -1,0 +1,231 @@
+SQL> --sys 계정은 최상위 권한자 이므로, 중요한 업무를 다룰때 사용하므로, 개발자가 사용할 일이 없음
+SQL> --따라서 sys보다 하위에 관리자 계정인 system계정을 사용해서 실습
+SQL> --다른 계정으로 로그인을 전환하는 방법=connect
+SQL> connect system/1234
+Connected.
+SQL> --현재 잘 들어온 건지 확인=show user
+SQL> show user
+USER is "SYSTEM"
+SQL> --앞으로 테이블을 저장할 데이터베이스와 파일을 생성해보자
+SQL> --데이터 베이스 생성 명령어
+SQL> create tablespace study
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\study.dbf'
+  3  size 1M;
+
+Tablespace created.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create user user0827
+  2  identified by user0827
+  3  default tablespace study
+  4* quota unlimited on study
+SQL> /
+
+User created.
+
+SQL> --유저가 생성되었으면, 이 유저로 로그인 해보자
+SQL> conn user0827/user0827
+ERROR:
+ORA-01045: user USER0827 lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> --생성된 유저는 아무런 권한이 없으므로, 필요한 권한을 부여받아야 함.
+SQL> show user
+USER is ""
+SQL> --시스템으로 재접속
+SQL> conn system/1234
+Connected.
+SQL> show user
+USER is "SYSTEM"
+SQL> --사용자에게 권한 주기
+SQL> grant create  session to user0827;
+
+Grant succeeded.
+
+SQL> conn user0827/user0827
+Connected.
+SQL> show user
+USER is "USER0827"
+SQL> --과제 풀어보기
+SQL> conn system/1234
+Connected.
+SQL> show user
+USER is "SYSTEM"
+SQL> alter idetified manager
+  2  /
+alter idetified manager
+      *
+ERROR at line 1:
+ORA-00940: invalid ALTER command 
+
+
+SQL> show user
+USER is "SYSTEM"
+SQL> create tablespace
+  2  create tablespace web
+  3  /
+create tablespace web
+*
+ERROR at line 2:
+ORA-02216: tablespace name expected 
+
+
+SQL> create tablespace web
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\web'
+  3  size 10M;
+
+Tablespace created.
+
+SQL> create user java
+  2  identified by 1234
+  3  dafault tablespace web
+  4  quota unlimitied on web
+  5  /
+dafault tablespace web
+*
+ERROR at line 3:
+ORA-00922: missing or invalid option 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create user java
+  2  identified by 1234
+  3  default tablespace web
+  4* quota unlimitied on web
+SQL> /
+quota unlimitied on web
+      *
+ERROR at line 4:
+ORA-02187: invalid quota specification 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create user java
+  2  identified by 1234
+  3  default tablespace web
+  4* quota unlimited on web
+SQL> /
+
+User created.
+
+SQL> show user
+USER is "SYSTEM"
+SQL> conn java/1234
+ERROR:
+ORA-01045: user JAVA lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> greant create session to java
+SP2-0734: unknown command beginning "greant cre..." - rest of line ignored.
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create user java
+  2  identified by 1234
+  3  default tablespace web
+  4* quota unlimited on web
+SQL> /
+SP2-0640: Not connected
+SQL> show user
+USER is ""
+SQL> connect java
+ERROR:
+ORA-01045: user JAVA lacks CREATE SESSION privilege; logon denied 
+
+
+SQL> grant create session to java
+  2  /
+SP2-0640: Not connected
+SQL> show user
+USER is ""
+SQL> conn system/1234
+Connected.
+SQL> grant create session to java
+  2  /
+
+Grant succeeded.
+
+SQL> connect java/1234
+Connected.
+SQL> show user
+USER is "JAVA"
+SQL> --
+SQL> --비밀번호 변경하기(system)
+SQL> conn sys
+ERROR:
+ORA-01005: null password given; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> conn sys/ as sysdba
+Connected.
+SQL> --존재의 변경은 alter로 한다
+SQL> alter user system
+  2  identified by manager;
+
+User altered.
+
+SQL> --바뀐 비번으로 접속하기
+SQL> conn system/manager
+Connected.
+SQL> create tablespace app
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\app.dbf
+  3  size 10M;
+datafile 'C:\oraclexe\app\oracle\oradata\XE\app.dbf
+         *
+ERROR at line 2:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create tablespace app
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\app.dbf'
+  3* size 10M
+SQL> /
+
+Tablespace created.
+
+SQL> create user dev
+  2  identified by 1234
+  3  default tablespace app
+  4  quota unlimited on app
+  5  /
+
+User created.
+
+SQL> grant create session, create table to dev
+  2  /
+
+Grant succeeded.
+
+SQL> conn dev/1234
+Connected.
+SQL> create table member(
+  2  name varchar(20)
+  3  , money number
+  4  , phone varchar(13)
+  5  );
+
+Table created.
+
+SQL> insert into member(name,money,phone)
+  2  values('pet',3000,'010-1234-5678')
+  3  /
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> spool off

@@ -1,0 +1,417 @@
+Microsoft Windows [Version 10.0.18363.1016]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\이어진>sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on 화 9월 8 09:11:59 2020
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Enter user-name: sys/as sysdba
+Enter password:
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> spool 'D:\koreaIT\Workspace\database\0908.txt'
+SQL> show user
+USER is "SYS"
+SQL> --딕셔너리(시스템에서 지원하는 데이터)
+SQL> --수백여가지 외우기 힘들다
+SQL> --접두어 관리자 dba_, 일반사용자 user_r_
+SQL> select username from dba_users;
+
+USERNAME
+------------------------------------------------------------
+LEEEOJIN
+SYS
+SYSTEM
+ANONYMOUS
+EOJIN
+USER0907
+APEX_PUBLIC_USER
+FLOWS_FILES
+APEX_040000
+OUTLN
+DIP
+
+USERNAME
+------------------------------------------------------------
+ORACLE_OCM
+XS$NULL
+MDSYS
+CTXSYS
+DBSNMP
+XDB
+APPQOSSYS
+HR
+
+19 rows selected.
+
+SQL> conn user0907/1234
+Connected.
+SQL> --sql 문이 아니라 SQLPlus 툴 명령어
+SQL> set line 200
+SQL> select *from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10
+
+14 rows selected.
+
+SQL> --페이지당 보여질 레코드 수를 늘리자
+SQL> set pagesize 20
+SQL> /
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10
+
+14 rows selected.
+
+SQL> --급여의 평균
+SQL> select avg(sal) from emp;
+
+  AVG(SAL)
+----------
+2073.21429
+
+SQL> --평균급여보다 높은 급여를 받은 사원의 이름, 급여를 출력
+SQL> select name,sal from emp where sal>2073.21429;
+select name,sal from emp where sal>2073.21429
+       *
+ERROR at line 1:
+ORA-00904: "NAME": invalid identifier
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename,sal from emp where sal>2073.21429
+SQL> /
+
+ENAME                       SAL
+-------------------- ----------
+JONES                      2975
+BLAKE                      2850
+CLARK                      2450
+SCOTT                      3000
+KING                       5000
+FORD                       3000
+
+6 rows selected.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename,sal from emp where sal>(select avg(sal) from emp)
+SQL> /
+
+ENAME                       SAL
+-------------------- ----------
+JONES                      2975
+BLAKE                      2850
+CLARK                      2450
+SCOTT                      3000
+KING                       5000
+FORD                       3000
+
+6 rows selected.
+
+SQL> --서브쿼리(sub query)
+SQL> --allen과 부서가 같은 사원들의 사원명, 입사일을 출력하되 높은급여순으로 출력
+SQL> select ename,hiredate from emp where deptno=(select deptno from emp where ename='ALLEN');
+
+ENAME                HIREDATE
+-------------------- --------
+ALLEN                81/02/20
+WARD                 81/02/22
+MARTIN               81/09/28
+BLAKE                81/05/01
+TURNER               81/09/08
+JAMES                81/12/03
+
+6 rows selected.
+
+SQL> --최대급여를 받은 사원보다 입사일이 늦은 사원의 이름,입사일을 출력
+SQL> select ename, hiredate from emp where hiredate <(select hiredate from emo where max(sal));
+select ename, hiredate from emp where hiredate <(select hiredate from emo where max(sal))
+                                                                                *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate from emp where hiredate <(select hiredate from emp where max(sal))
+SQL> /
+select ename, hiredate from emp where hiredate <(select hiredate from emp where max(sal))
+                                                                                *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate from emp where sal <(select hiredate from emp where max(sal))
+SQL> /
+select ename, hiredate from emp where sal <(select hiredate from emp where max(sal))
+                                                                           *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate from emp where hiredate>(select hiredate from emp where max(sal))
+SQL> /
+select ename, hiredate from emp where hiredate>(select hiredate from emp where max(sal))
+                                                                               *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate from emp where hiredate>(select hiredate from emp where sal=max(sal))
+SQL> /
+select ename, hiredate from emp where hiredate>(select hiredate from emp where sal=max(sal))
+                                                                                   *
+ERROR at line 1:
+ORA-00934: group function is not allowed here
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate from emp where hiredate>(select hiredate from emp where sal=(select max(sal) from emp))
+SQL> /
+
+ENAME                HIREDATE
+-------------------- --------
+SCOTT                87/04/19
+ADAMS                87/05/23
+JAMES                81/12/03
+FORD                 81/12/03
+MILLER               82/01/23
+
+SQL> --이름이 T자가 들어가는 사원들의 급여 합을 구하기
+SQL> select sum(sal) from emp where ename like '%T%';
+
+  SUM(SAL)
+----------
+      6550
+
+SQL> --20번 부서의 최고 급여보다 급여가 높은 사원의 사원번호 사원명 급여 출력
+SQL> select empno,ename,sal from emp where sal>(select max(sal) from emp where deptno=20));
+select empno,ename,sal from emp where sal>(select max(sal) from emp where deptno=20))
+                                                                                    *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select empno,ename,sal from emp where sal>(select max(sal) from emp where deptno=20)
+SQL> /
+
+     EMPNO ENAME                       SAL
+---------- -------------------- ----------
+      7839 KING                       5000
+
+SQL> --scott의 급여에서 1000을 뺀 급여보다 적게 받는 사원의 이름,급여를 출력
+SQL> select ename,sal from emp where < (select sal-1000 from emp where ename='SCOTT');
+select ename,sal from emp where < (select sal-1000 from emp where ename='SCOTT')
+                                *
+ERROR at line 1:
+ORA-00936: missing expression
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename,sal from emp where < (select sal(sal-1000) from emp where ename='SCOTT')
+SQL> /
+select ename,sal from emp where < (select sal(sal-1000) from emp where ename='SCOTT')
+                                *
+ERROR at line 1:
+ORA-00936: missing expression
+
+
+SQL> --**ALLEN과 부서가 같은 사원들의 ~~~높은 급여순
+SQL> select ename, hiredate from emp where deptno = (select deptno from emp where name='ALLEN') order by sal desc;
+select ename, hiredate from emp where deptno = (select deptno from emp where name='ALLEN') order by sal desc
+                                                                             *
+ERROR at line 1:
+ORA-00904: "NAME": invalid identifier
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate, sal from emp where deptno = (select deptno from emp where ename='ALLEN') order by sal desc
+SQL> /
+
+ENAME                HIREDATE        SAL
+-------------------- -------- ----------
+BLAKE                81/05/01       2850
+ALLEN                81/02/20       1600
+TURNER               81/09/08       1500
+WARD                 81/02/22       1250
+MARTIN               81/09/28       1250
+JAMES                81/12/03        950
+
+6 rows selected.
+
+SQL> --SCOTT의 급여에서 1000을 뺀 급여보다 적게 받는 사원의 이름,급여
+SQL> selelct ename, sal from emp where sal<(select sal-1000 from emp where ename='SCOTT');
+SP2-0734: unknown command beginning "selelct en..." - rest of line ignored.
+SQL> ed
+Wrote file afiedt.buf
+
+  1* select ename, hiredate, sal from emp where deptno = (select deptno from emp where ename='ALLEN') order by sal desc
+SQL> select ename, sal from emp where sal<(select sal-1000 from emp where ename='SCOTT');
+
+ENAME                       SAL
+-------------------- ----------
+SMITH                       800
+ALLEN                      1600
+WARD                       1250
+MARTIN                     1250
+TURNER                     1500
+ADAMS                      1100
+JAMES                       950
+MILLER                     1300
+
+8 rows selected.
+
+SQL> select ename from emp where ename like 'S%H';
+
+ENAME
+--------------------
+SMITH
+
+SQL> --이름이 S로시작하고 마지막글자가 H인 사원의 이름
+SQL> --WARD가 소속된 부서의 사원들의 평균 급여보다 급여가 높은 사원의 이름, 급여 출력
+SQL> select ename,sal from emp where sal>(select avg(sal) from emp where deptno=(select deptno from emp where ename='WARD'));
+
+ENAME                       SAL
+-------------------- ----------
+ALLEN                      1600
+JONES                      2975
+BLAKE                      2850
+CLARK                      2450
+SCOTT                      3000
+KING                       5000
+FORD                       3000
+
+7 rows selected.
+
+SQL> select *from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10
+
+14 rows selected.
+
+SQL> select job from emp
+  2  /
+
+JOB
+------------------
+CLERK
+SALESMAN
+SALESMAN
+MANAGER
+SALESMAN
+MANAGER
+MANAGER
+ANALYST
+PRESIDENT
+SALESMAN
+CLERK
+CLERK
+ANALYST
+CLERK
+
+14 rows selected.
+
+SQL> select job from emp
+  2  group by job;
+
+JOB
+------------------
+CLERK
+SALESMAN
+PRESIDENT
+MANAGER
+ANALYST
+
+SQL> --group by 사용시 주의할 점
+SQL> --group by에 명시한 컬럼만이, select 절의 대상이 될 수 있다.
+SQL> --예외)집계함수는 group by에 명시하지 않아도 select 절에 올 수 있다.
+SQL> --     왜?이미 그룹화된 결과 이므로
+SQL> select job, count(job) from emp group by job;
+
+JOB                COUNT(JOB)
+------------------ ----------
+CLERK                       4
+SALESMAN                    4
+PRESIDENT                   1
+MANAGER                     3
+ANALYST                     2
+
+SQL> commit
+  2  spool off
+  3  spool off
+  4  spool off
+  5  spool o

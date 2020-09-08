@@ -1,0 +1,698 @@
+변경 DDL-alter
+alter user user0907
+default tablespace space0907
+quota unlimited on space0907;
+
+접속 권한, 테이블 생성 권한 같이 가능
+grant create session, create table to '유저명'
+
+
+테이블 삭제
+drop table member;
+테이블을 버리면 rollback불가능
+
+--컬럼 제거(기존 테이블의 구조변경)DDL-alter
+alter table member
+drop column age;
+-복구불가능 신중해야한다.
+
+
+트랜잭션 확정이어야만, 데이터가 디스크에 기록됨
+DML 작업을 확정짓는것
+
+조건을 붙여 확인
+select name, age ,birth from member;
+select * from member where name='박나래'; 
+
+변경
+update  member set name='홍철' where name='노홍철';
+
+삭제
+delete from member where name='박나래';
+
+
+값이 없는 상태를 데이터베이스에서는 null이라 한다.
+update member set name='' -> 공백문자열 값 아무것도 없는 건 아님
+
+like 닮다, 비슷하다 % ->을 넣어서 작성
+ex)select ename,job,deptno from emp where ename like '%T';
+= 정확히 일치, 연산자로는 값이 없는 null을 비교할 수 없다.(is null)
+                                        있으면 not null 
+--테이블 스페이스 파일은 함부로 그냥 지우면 안되고
+논리적으로 먼저 삭제 후,물리적인 파일을 지워야한다
+drop tablespace space0907; ->등록삭제
+
+
+C:\Users\이어진>sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on 월 9월 7 09:31:38 2020
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Enter user-name: sys/ as sysdba
+Enter password:
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> show user
+USER is "SYS"
+SQL> create tablespace space0907
+  2  datafile 'C:\oraclexe\app\oracle\oradata\XE\space0907.dbf'
+  3  size 2M
+  4  /
+
+Tablespace created.
+
+SQL> create user user0907
+  2  identified by 1234
+  3  default tablespace space0907
+  4  quota unlimitied on space0907
+  5  /
+quota unlimitied on space0907
+      *
+ERROR at line 4:
+ORA-02187: invalid quota specification
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create user user0907
+  2  identified by 1234
+  3  default tablespace space0907
+  4* quota unlimited on space0907
+SQL> /
+
+User created.
+
+SQL> show user
+USER is "SYS"
+SQL> grant create session on user0907
+  2  /
+grant create session on user0907
+      *
+ERROR at line 1:
+ORA-00990: missing or invalid privilege
+
+
+SQL> grant create session to user0907;
+
+Grant succeeded.
+
+SQL> grant create session to user0907;
+
+Grant succeeded.
+
+SQL> conn user0907/1234
+Connected.
+SQL> show user
+USER is "USER0907"
+SQL> create table member(
+  2  name varchar(20)
+  3  , age number
+  4  , birth varchar(10)
+  5  );
+create table member(
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  grant create session, create table to member
+  2  create table member(
+  3  name varchar(20)
+  4  , age number
+  5  , birth varchar(10)
+  6* )
+SQL>
+SQL> /
+create table member(
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended
+
+
+SQL> grant create session, create table to member
+  2  /
+grant create session, create table to member
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> show user
+USER is "USER0907"
+SQL> grant create session, create table to user0907
+  2  /
+grant create session, create table to user0907
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> create table to user0907/
+  2  /
+create table to user0907/
+             *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+SQL> create table to user0907
+  2  /
+create table to user0907
+             *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+SQL> create table member
+  2  /
+create table member
+                  *
+ERROR at line 1:
+ORA-00906: missing left parenthesis
+
+
+SQL> create table member(\
+  2  ed
+  3  /
+create table member(\
+                    *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create table member(
+  2  name varchar(20)
+  3  , age number
+  4  , birth varchar(10)
+  5* );
+SQL> /
+);
+ *
+ERROR at line 5:
+ORA-00911: invalid character
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create table member(
+  2  name varchar(20)
+  3  , age number
+  4  , birth varchar(10)
+  5* )
+SQL> .
+SQL> /
+create table member(
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> grant create session, create table to user0907\
+  2  /
+grant create session, create table to user0907\
+                                              *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* grant create session, create table to user0907
+SQL> /
+grant create session, create table to user0907
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+
+SQL> conn sys/as sysdba
+Enter password:
+Connected.
+SQL> grant create to session user0907
+  2  /
+grant create to session user0907
+                *
+ERROR at line 1:
+ORA-00987: missing or invalid username(s)
+
+
+SQL> grant create session to user0907
+  2  /
+
+Grant succeeded.
+
+SQL> grant create table to user0907\
+  2  /
+grant create table to user0907\
+                              *
+ERROR at line 1:
+ORA-00911: invalid character
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* grant create table to user0907
+SQL> /
+
+Grant succeeded.
+
+SQL> conn user0907/1234
+Connected.
+SQL> show user
+USER is "USER0907"
+SQL> create table member(
+  2  name varchar(20)
+  3  , age number
+  4  , birth varchar(10)
+  5  );
+
+Table created.
+
+SQL> insert into member(name,age,birth)
+  2  values(이름:'노홍철',나이:30,생년월일:'1989-09-01')
+  3  values(이름:'박나래',나이:27,생년월일:'1986-07-15')
+  4  /
+SP2-0552: Bind variable "27" not declared.
+SQL> ed
+Wrote file afiedt.buf
+
+  1  insert into member(name,age,birth)
+  2  values('노홍철',30,'1989-09-01')
+  3* values('박나래',27,'1986-07-15')
+SQL> /
+values('박나래',27,'1986-07-15')
+   *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  insert into member(name,age,birth)
+  2* values('노홍철',30,'1989-09-01')
+SQL> /
+
+1 row created.
+
+SQL> insert into member(name,age,birth)
+  2  values('박나래',27,'1986-07-15')
+  3  /
+
+1 row created.
+
+SQL> commit
+  2  /
+
+Commit complete.
+
+SQL> show table
+SP2-0158: unknown SHOW option "table"
+SQL> select name,age,birth from emp;
+select name,age,birth from emp
+                           *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select name;
+select name
+          *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+SQL> select name,age,birth from member;
+
+NAME                                            AGE BIRTH
+---------------------------------------- ---------- --------------------
+노홍철                                           30 1989-09-01
+박나래                                           27 1986-07-15
+
+SQL> select name'박나래' from member;
+select name'박나래' from member
+           *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+SQL> select name from member;
+
+NAME
+----------------------------------------
+노홍철
+박나래
+
+SQL> select '박나래' from member;
+
+'박나래'
+------------------
+박나래
+박나래
+
+SQL> select name,age,birth from '박나래';
+select name,age,birth from '박나래'
+                           *
+ERROR at line 1:
+ORA-00903: invalid table name
+
+
+SQL> select name,age,birth from member
+  2  '박나래'
+  3  /
+'박나래'
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended
+
+
+SQL> spool 'D:\koreaIT\Workspace\database'
+SQL> /
+'박나래'
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1* spool 'D:\koreaIT\Workspace\database\4일차.txt'
+SQL> /
+spool 'D:\koreaIT\Workspace\database\4일차.txt'
+*
+ERROR at line 1:
+ORA-00900: invalid SQL statement
+
+
+SQL> spool 'D:\koreaIT\Workspace\database\4일차.txt';'
+SP2-0768: Illegal SPOOL command
+Usage: SPOOL { <file> | OFF | OUT }
+where <file> is file_name[.ext] [CRE[ATE]|REP[LACE]|APP[END]]
+SQL> drop table member;
+
+Table dropped.
+
+SQL> show user
+USER is "USER0907"
+SQL> create table member(
+  2  , name varchar(20)
+  3  , age number
+  4  , birth date
+  5  );
+, name varchar(20)
+*
+ERROR at line 2:
+ORA-00904: : invalid identifier
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  create table member(
+  2  name varchar(20)
+  3  , age number
+  4  , birth date
+  5* )
+SQL> /
+
+Table created.
+
+SQL> insert into member(name, age, birth) values('노홍철', 30, '1989-09-01');
+
+1 row created.
+
+SQL> insert into member(name, age, birth) values('박나래', 27, '1986-07-15');
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select name,age,birth from member;
+
+NAME                                            AGE BIRTH
+---------------------------------------- ---------- --------
+노홍철                                           30 89/09/01
+박나래                                           27 86/07/15
+
+SQL> select * from member where name='박나래';
+
+NAME                                            AGE BIRTH
+---------------------------------------- ---------- --------
+박나래                                           27 86/07/15
+
+SQL> select name,birth from member where birth='1989-09-01';
+
+NAME                                     BIRTH
+---------------------------------------- --------
+노홍철                                   89/09/01
+
+SQL> select name,age from member where age=27;
+
+NAME                                            AGE
+---------------------------------------- ----------
+박나래                                           27
+
+SQL> update member set name='홍철' where name='노홍철';
+
+1 row updated.
+
+SQL> select * from member;
+
+NAME                                            AGE BIRTH
+---------------------------------------- ---------- --------
+홍철                                             30 89/09/01
+박나래                                           27 86/07/15
+
+SQL> delete from member where name='박나래';
+
+1 row deleted.
+
+SQL> select * from member;
+
+NAME                                            AGE BIRTH
+---------------------------------------- ---------- --------
+홍철                                             30 89/09/01
+
+SQL> alter table member
+  2  drop column age;
+
+Table altered.
+
+SQL> select * from member;
+
+NAME                                     BIRTH
+---------------------------------------- --------
+홍철                                     89/09/01
+
+SQL> spool off
+SQL>
+
+현재 계정이 어떤 테이블을 가지고 있는지 조회하기
+시스템정보를 가져올때 사용하는 
+
+
+--SQLplus 툴 명령어 중 화면에 보여줄 텍스트의 버퍼크기 지정
+set line 200
+--한페이지당 보여질 레코드 수
+set pagesize 20
+
+쿼리문장은 대소문자를 가리지 않지만 데이터는 당연히 구분됨
+
+
+
+
+-------mysql
+
+유저생성
+create user '유저명'@'localhost' identified by '비밀번호';
+
+권한
+grant all privileges on mydb.* to 'dev0907'@'localhost';
+
+갱신
+flush privileges;
+
+quit;으로 빠져나오기 ->시스템 변경시
+mysql -u dev0907 -p
+
+
+SQL문 ANSI 데이터베이스 제품에 상관없이 공통
+
+
+테이블 생성
+create  table member(
+  name varchar(20)
+ , age int 
+ , birth  timestamp
+) default  character set utf8; -> 한글안깨지게해준다
+
+
+alrter(구조,존재), update(데이터를 대상으로 )
+
+C:\Program Files\MariaDB 10.3\bin>cd C:\Program Files\MariaDB 10.3\bin
+
+C:\Program Files\MariaDB 10.3\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 12
+Server version: 10.3.13-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| mysql              |
+| performance_schema |
+| test               |
++--------------------+
+5 rows in set (0.001 sec)
+
+MariaDB [(none)]> create user 'dev0907'@'localhost'
+    -> identified by 1234;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '1234' at line 2
+MariaDB [(none)]> create user 'dev0907'@'localhost' identified by '1234';
+Query OK, 0 rows affected (0.005 sec)
+
+MariaDB [(none)]> grant all privileges on mydb.* to 'dev0907'@'localhost';
+Query OK, 0 rows affected (0.003 sec)
+
+MariaDB [(none)]> flush privileges;
+Query OK, 0 rows affected (0.003 sec)
+
+MariaDB [(none)]> quit;
+Bye
+
+C:\Program Files\MariaDB 10.3\bin>mysql -u dev0907 -p
+Enter password: ****
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 13
+Server version: 10.3.13-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mydb               |
+| test               |
++--------------------+
+3 rows in set (0.003 sec)
+
+MariaDB [(none)]> use mydb;
+Database changed
+MariaDB [mydb]> create table member(
+    -> name varchar(20)
+    -> , age int
+    -> , birth timestamp
+    -> ) default character set utf8;
+Query OK, 0 rows affected (0.053 sec)
+
+MariaDB [mydb]> insert into member(name,age,birth) values('노홍철',30,'1989-09-01');
+Query OK, 1 row affected (0.007 sec)
+
+MariaDB [mydb]> insert into member(name,age,birth) values('박나래',27,'1986-07-15');
+Query OK, 1 row affected (0.006 sec)
+
+MariaDB [mydb]> select *from member;
++--------+------+---------------------+
+| name   | age  | birth               |
++--------+------+---------------------+
+| 노홍철 |   30 | 1989-09-01 00:00:00 |
+| 박나래 |   27 | 1986-07-15 00:00:00 |
++--------+------+---------------------+
+2 rows in set (0.003 sec)
+
+MariaDB [mydb]> select *from member where name='박나래';
++--------+------+---------------------+
+| name   | age  | birth               |
++--------+------+---------------------+
+| 박나래 |   27 | 1986-07-15 00:00:00 |
++--------+------+---------------------+
+1 row in set (0.002 sec)
+
+MariaDB [mydb]> select name,birth from member where birth='1989-09-01';
++--------+---------------------+
+| name   | birth               |
++--------+---------------------+
+| 노홍철 | 1989-09-01 00:00:00 |
++--------+---------------------+
+1 row in set (0.002 sec)
+
+MariaDB [mydb]> select name,age from member where age=27;
++--------+------+
+| name   | age  |
++--------+------+
+| 박나래 |   27 |
++--------+------+
+1 row in set (0.000 sec)
+
+MariaDB [mydb]> update memer set name='홍철' where name='노홍철';
+ERROR 1146 (42S02): Table 'mydb.memer' doesn't exist
+MariaDB [mydb]> update member set name='홍철 where name='노홍철';
+    '> /
+    '> '
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '노홍철';
+/
+'' at line 1
+MariaDB [mydb]> select *from member;
++--------+------+---------------------+
+| name   | age  | birth               |
++--------+------+---------------------+
+| 노홍철 |   30 | 1989-09-01 00:00:00 |
+| 박나래 |   27 | 1986-07-15 00:00:00 |
++--------+------+---------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [mydb]> update member set name='홍철' where name='노홍철';
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [mydb]> delete from member where name='박나래';
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [mydb]> drop table member;
+Query OK, 0 rows affected (0.019 sec)
+
+MariaDB [mydb]>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
