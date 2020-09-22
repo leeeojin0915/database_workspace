@@ -1,0 +1,335 @@
+SQL> conn user0907/1234
+Connected.
+SQL> select *from emp
+  2  ;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7369 SMITH                CLERK                    7902 80/12/17          
+       800                    20                                                
+                                                                                
+      7499 ALLEN                SALESMAN                 7698 81/02/20          
+      1600        300         30                                                
+                                                                                
+      7521 WARD                 SALESMAN                 7698 81/02/22          
+      1250        500         30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7566 JONES                MANAGER                  7839 81/04/02          
+      2975                    20                                                
+                                                                                
+      7654 MARTIN               SALESMAN                 7698 81/09/28          
+      1250       1400         30                                                
+                                                                                
+      7698 BLAKE                MANAGER                  7839 81/05/01          
+      2850                    30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7782 CLARK                MANAGER                  7839 81/06/09          
+      2450                    10                                                
+                                                                                
+      7788 SCOTT                ANALYST                  7566 87/04/19          
+      3000                    20                                                
+                                                                                
+      7839 KING                 PRESIDENT                     81/11/17          
+      5000                    10                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7844 TURNER               SALESMAN                 7698 81/09/08          
+      1500          0         30                                                
+                                                                                
+      7876 ADAMS                CLERK                    7788 87/05/23          
+      1100                    20                                                
+                                                                                
+      7900 JAMES                CLERK                    7698 81/12/03          
+       950                    30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------          
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7902 FORD                 ANALYST                  7566 81/12/03          
+      3000                    20                                                
+                                                                                
+      7934 MILLER               CLERK                    7782 82/01/23          
+      1300                    10                                                
+                                                                                
+
+14 rows selected.
+
+SQL> set line 200
+SQL> set pagesize 20;
+SQL> /
+
+     EMPNO ENAME                JOB                       MGR HIREDATE        SAL       COMM     DEPTNO                                                                                                 
+---------- -------------------- ------------------ ---------- -------- ---------- ---------- ----------                                                                                                 
+      7369 SMITH                CLERK                    7902 80/12/17        800                    20                                                                                                 
+      7499 ALLEN                SALESMAN                 7698 81/02/20       1600        300         30                                                                                                 
+      7521 WARD                 SALESMAN                 7698 81/02/22       1250        500         30                                                                                                 
+      7566 JONES                MANAGER                  7839 81/04/02       2975                    20                                                                                                 
+      7654 MARTIN               SALESMAN                 7698 81/09/28       1250       1400         30                                                                                                 
+      7698 BLAKE                MANAGER                  7839 81/05/01       2850                    30                                                                                                 
+      7782 CLARK                MANAGER                  7839 81/06/09       2450                    10                                                                                                 
+      7788 SCOTT                ANALYST                  7566 87/04/19       3000                    20                                                                                                 
+      7839 KING                 PRESIDENT                     81/11/17       5000                    10                                                                                                 
+      7844 TURNER               SALESMAN                 7698 81/09/08       1500          0         30                                                                                                 
+      7876 ADAMS                CLERK                    7788 87/05/23       1100                    20                                                                                                 
+      7900 JAMES                CLERK                    7698 81/12/03        950                    30                                                                                                 
+      7902 FORD                 ANALYST                  7566 81/12/03       3000                    20                                                                                                 
+      7934 MILLER               CLERK                    7782 82/01/23       1300                    10                                                                                                 
+
+14 rows selected.
+
+SQL> --사원의 입사일을 출력하되 다음과 같은 형식으로./
+SQL> --ex)1980-08-23
+SQL> select hiredate from emp
+  2  ;
+
+HIREDATE                                                                                                                                                                                                
+--------                                                                                                                                                                                                
+80/12/17                                                                                                                                                                                                
+81/02/20                                                                                                                                                                                                
+81/02/22                                                                                                                                                                                                
+81/04/02                                                                                                                                                                                                
+81/09/28                                                                                                                                                                                                
+81/05/01                                                                                                                                                                                                
+81/06/09                                                                                                                                                                                                
+87/04/19                                                                                                                                                                                                
+81/11/17                                                                                                                                                                                                
+81/09/08                                                                                                                                                                                                
+87/05/23                                                                                                                                                                                                
+81/12/03                                                                                                                                                                                                
+81/12/03                                                                                                                                                                                                
+82/01/23                                                                                                                                                                                                
+
+14 rows selected.
+
+SQL> select to_char(hiredate,'yyyy-mm-dd')from emp;
+
+TO_CHAR(HIREDATE,'YY                                                                                                                                                                                    
+--------------------                                                                                                                                                                                    
+1980-12-17                                                                                                                                                                                              
+1981-02-20                                                                                                                                                                                              
+1981-02-22                                                                                                                                                                                              
+1981-04-02                                                                                                                                                                                              
+1981-09-28                                                                                                                                                                                              
+1981-05-01                                                                                                                                                                                              
+1981-06-09                                                                                                                                                                                              
+1987-04-19                                                                                                                                                                                              
+1981-11-17                                                                                                                                                                                              
+1981-09-08                                                                                                                                                                                              
+1987-05-23                                                                                                                                                                                              
+1981-12-03                                                                                                                                                                                              
+1981-12-03                                                                                                                                                                                              
+1982-01-23                                                                                                                                                                                              
+
+14 rows selected.
+
+SQL> select to_char(hiredate,'yyyy-mm-dd'),hiredate from emp;
+
+TO_CHAR(HIREDATE,'YY HIREDATE                                                                                                                                                                           
+-------------------- --------                                                                                                                                                                           
+1980-12-17           80/12/17                                                                                                                                                                           
+1981-02-20           81/02/20                                                                                                                                                                           
+1981-02-22           81/02/22                                                                                                                                                                           
+1981-04-02           81/04/02                                                                                                                                                                           
+1981-09-28           81/09/28                                                                                                                                                                           
+1981-05-01           81/05/01                                                                                                                                                                           
+1981-06-09           81/06/09                                                                                                                                                                           
+1987-04-19           87/04/19                                                                                                                                                                           
+1981-11-17           81/11/17                                                                                                                                                                           
+1981-09-08           81/09/08                                                                                                                                                                           
+1987-05-23           87/05/23                                                                                                                                                                           
+1981-12-03           81/12/03                                                                                                                                                                           
+1981-12-03           81/12/03                                                                                                                                                                           
+1982-01-23           82/01/23                                                                                                                                                                           
+
+14 rows selected.
+
+SQL> --입사일이 1980년인 사원의 이름,입사일을 출력하세요
+SQL> select ename,hiredate from emp where to_char(hiredate, 'yyyy')='1980';
+
+ENAME                HIREDATE                                                                                                                                                                           
+-------------------- --------                                                                                                                                                                           
+SMITH                80/12/17                                                                                                                                                                           
+
+SQL> --입사일이 5월인 사원을 출력하세요
+SQL> select ename from emp where to_char(hiredate,'mm')='5';
+
+no rows selected
+
+SQL> select ename from emp where to_char(hiredate,'mm')='05';
+
+ENAME                                                                                                                                                                                                   
+--------------------                                                                                                                                                                                    
+BLAKE                                                                                                                                                                                                   
+ADAMS                                                                                                                                                                                                   
+
+SQL> --사원번호가 홀수인 사원의 사원번호,이름을 출력
+SQL> --select mod(5,3) from dual;
+SQL> select empno,ename from emp mod(empno,2)!=0;
+select empno,ename from emp mod(empno,2)!=0
+                               *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> select empno,ename from emp where mod(empno,2)!=0;
+
+     EMPNO ENAME                                                                                                                                                                                        
+---------- --------------------                                                                                                                                                                         
+      7369 SMITH                                                                                                                                                                                        
+      7499 ALLEN                                                                                                                                                                                        
+      7521 WARD                                                                                                                                                                                         
+      7839 KING                                                                                                                                                                                         
+
+SQL> --사원의 이름,이름의 길이를 출력
+SQL> selectg ename,length(ename)from emp;
+SP2-0734: unknown command beginning "selectg en..." - rest of line ignored.
+SQL> select ename,length(ename)from emp;
+
+ENAME                LENGTH(ENAME)                                                                                                                                                                      
+-------------------- -------------                                                                                                                                                                      
+SMITH                            5                                                                                                                                                                      
+ALLEN                            5                                                                                                                                                                      
+WARD                             4                                                                                                                                                                      
+JONES                            5                                                                                                                                                                      
+MARTIN                           6                                                                                                                                                                      
+BLAKE                            5                                                                                                                                                                      
+CLARK                            5                                                                                                                                                                      
+SCOTT                            5                                                                                                                                                                      
+KING                             4                                                                                                                                                                      
+TURNER                           6                                                                                                                                                                      
+ADAMS                            5                                                                                                                                                                      
+JAMES                            5                                                                                                                                                                      
+FORD                             4                                                                                                                                                                      
+MILLER                           6                                                                                                                                                                      
+
+14 rows selected.
+
+SQL> --문자관련 함수 - length
+SQL> --함수는 DBMS제품마다 틀리므로 SQL과는 달리 공통적으로 사용할 수 없다.
+SQL> --즉, mysql,oracle,mssql 등 제품마다 지원되는 함수 명이 다르다.
+SQL> --지금은 oracle 함수를 사용하고 있는 것임
+SQL> --사원의 업무와 이름을 아래의 형식으로 출력
+SQL> --ex) CLERK업무담당 SMITH
+SQL> select concat(concat(job,'업무담당'),ename)from emp;
+
+CONCAT(CONCAT(JOB,'업무담당'),ENAME)                                                                                                                                                                    
+--------------------------------------------------------------                                                                                                                                          
+CLERK업무담당SMITH                                                                                                                                                                                      
+SALESMAN업무담당ALLEN                                                                                                                                                                                   
+SALESMAN업무담당WARD                                                                                                                                                                                    
+MANAGER업무담당JONES                                                                                                                                                                                    
+SALESMAN업무담당MARTIN                                                                                                                                                                                  
+MANAGER업무담당BLAKE                                                                                                                                                                                    
+MANAGER업무담당CLARK                                                                                                                                                                                    
+ANALYST업무담당SCOTT                                                                                                                                                                                    
+PRESIDENT업무담당KING                                                                                                                                                                                   
+SALESMAN업무담당TURNER                                                                                                                                                                                  
+CLERK업무담당ADAMS                                                                                                                                                                                      
+CLERK업무담당JAMES                                                                                                                                                                                      
+ANALYST업무담당FORD                                                                                                                                                                                     
+CLERK업무담당MILLER                                                                                                                                                                                     
+
+14 rows selected.
+
+SQL> select concat(concat(job,' 업무담당 '),ename)from emp;
+
+CONCAT(CONCAT(JOB,'업무담당'),ENAME)                                                                                                                                                                    
+------------------------------------------------------------------                                                                                                                                      
+CLERK 업무담당 SMITH                                                                                                                                                                                    
+SALESMAN 업무담당 ALLEN                                                                                                                                                                                 
+SALESMAN 업무담당 WARD                                                                                                                                                                                  
+MANAGER 업무담당 JONES                                                                                                                                                                                  
+SALESMAN 업무담당 MARTIN                                                                                                                                                                                
+MANAGER 업무담당 BLAKE                                                                                                                                                                                  
+MANAGER 업무담당 CLARK                                                                                                                                                                                  
+ANALYST 업무담당 SCOTT                                                                                                                                                                                  
+PRESIDENT 업무담당 KING                                                                                                                                                                                 
+SALESMAN 업무담당 TURNER                                                                                                                                                                                
+CLERK 업무담당 ADAMS                                                                                                                                                                                    
+CLERK 업무담당 JAMES                                                                                                                                                                                    
+ANALYST 업무담당 FORD                                                                                                                                                                                   
+CLERK 업무담당 MILLER                                                                                                                                                                                   
+
+14 rows selected.
+
+SQL> --오늘 날짜 출력
+SQL> select sysdate from dual;
+
+SYSDATE                                                                                                                                                                                                 
+--------                                                                                                                                                                                                
+20/09/21                                                                                                                                                                                                
+
+SQL> --to_char를 이용하여 오늘과 같은 월에 입사한 사원의 이름,입사일을 출력
+SQL> --즉,9월에 입사한 사원 정보 출력
+SQL> select ename,hiredate from emp where to_char('hiredate','mm')=to_char(sysdate,'mm');
+select ename,hiredate from emp where to_char('hiredate','mm')=to_char(sysdate,'mm')
+                                             *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> select ename,hiredate from emp where to_char(hiredate,'mm')=to_char(sysdate,'mm');
+
+ENAME                HIREDATE                                                                                                                                                                           
+-------------------- --------                                                                                                                                                                           
+MARTIN               81/09/28                                                                                                                                                                           
+TURNER               81/09/08                                                                                                                                                                           
+
+SQL> select ename,hirdate from emp where to_char(hiredate,'mm)=(select to_char(sysdate,'mm)from dual);
+select ename,hirdate from emp where to_char(hiredate,'mm)=(select to_char(sysdate,'mm)from dual)
+                                                                                   *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> select ename,hirdate from emp where to_char(hiredate,'mm)=(select to_char(sysdate,'mm')from dual);
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> select ename,hirdate from emp where to_char(hiredate,'mm')=(select to_char(sysdate,'mm')from dual);
+select ename,hirdate from emp where to_char(hiredate,'mm')=(select to_char(sysdate,'mm')from dual)
+             *
+ERROR at line 1:
+ORA-00904: "HIRDATE": invalid identifier 
+
+
+SQL> select ename,hiredate from emp where to_char(hiredate,'mm')=(select to_char(sysdate,'mm')from dual);
+
+ENAME                HIREDATE                                                                                                                                                                           
+-------------------- --------                                                                                                                                                                           
+MARTIN               81/09/28                                                                                                                                                                           
+TURNER               81/09/08                                                                                                                                                                           
+
+SQL> --add_months(대상날자,더할월)
+SQL> select add_months(sysdate,1)from dual;
+
+ADD_MONT                                                                                                                                                                                                
+--------                                                                                                                                                                                                
+20/10/21                                                                                                                                                                                                
+
+SQL> select add_months(sysdate,3)from dual;
+
+ADD_MONT                                                                                                                                                                                                
+--------                                                                                                                                                                                                
+20/12/21                                                                                                                                                                                                
+
+SQL> spool off;
